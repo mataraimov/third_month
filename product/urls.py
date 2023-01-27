@@ -11,6 +11,7 @@ from .views import (
 
 urlpatterns = [
     path('list/', ProductListAPIView.as_view(), name='product-list'),
+    path('filter/', ProductListAPIView.as_view(), name='product-list'),
     path('create/', ProductCreateAPIView.as_view(), name='product-create'),
     path('<int:id>/detail/', ProductDetailAPIView.as_view(), name='product-detail'),
     path('<int:id>/update/', ProductUpdateAPIView.as_view(), name='product-update'),
