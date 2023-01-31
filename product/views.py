@@ -1,5 +1,5 @@
 from django.http import Http404
-from rest_framework import permissions, status
+from rest_framework import permissions, status, generics
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,7 +7,7 @@ from .serializers import ProductSerializer, CartSerializer
 from .models import Product, Cart
 from users.permissions import IsVendorPermission, IsOwnerOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework import filters
 from .service import ProductFilter
 
 
@@ -38,13 +38,30 @@ class ProductListAPIView(APIView):
     permission_classes = [permissions.AllowAny]
     # authentication_classes = []
 
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['price']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['price']
     def get(self, request):
         snippets = Product.objects.all()
         serializer = ProductSerializer(snippets, many=True)
         return Response(serializer.data)
+class ProductFilterAPIView(generics.ListAPIView):
+    # filterset_class = ProductFilter
+    # filter_backends = (DjangoFilterBackend,)
+    permission_classes = [permissions.AllowAny]
+    # authentication_classes = []
 
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['price']
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['price', 'name']
+    # def get(self, request):
+    #     snippets = Product.objects.all()
+    #     serializer = ProductSerializer(snippets, many=True)
+    #     filter_backends = [filters.SearchFilter]
+    #     search_fields = ['name']
+    #     return Response(serializer.data)
 
 class ProductDetailAPIView(APIView):
     permission_classes = [permissions.AllowAny]
